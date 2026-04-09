@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  spark-master:
+    image: apache/spark:3.5.0
+    container_name: spark-master
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    volumes:
+      - ../common/jobs:/opt/spark-apps
+      - ../common/data:/opt/spark-data
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    networks:
+      - spark-network
+
+  spark-worker:
+    image: apache/spark:3.5.0
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    volumes:
+      - ../common/jobs:/opt/spark-apps
+      - ../common/data:/opt/spark-data
+    networks:
+      - spark-network
+
+  spark-submit:
+    image: apache/spark:3.5.0
+    container_name: spark-submit
+    depends_on:
+      - spark-master
+    volumes:
+      - ../common/jobs:/opt/spark-apps
+      - ../common/data:/opt/spark-data
+    networks:
+      - spark-network
+    entrypoint: ["/bin/bash", "-c", "sleep infinity"]
+  
+  jupyter:
+    image: jupyter/pyspark-notebook
+    container_name: jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ../common/data:/opt/spark-data
+      - ../:/home/jovyan/work
+    networks:
+      - spark-network
+
+networks:
+  spark-network:
