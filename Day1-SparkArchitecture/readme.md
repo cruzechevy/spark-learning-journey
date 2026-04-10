@@ -152,7 +152,9 @@ common/jobs/day01_job.py
 Executed using:
 
 ```bash
-spark-submit --master spark://spark-master:7077 day01_job.py
+docker exec -it spark-submit /opt/spark/bin/spark-submit \
+--master spark://spark-master:7077 \
+/opt/spark-apps/day01_job.py
 ```
 
 ---
