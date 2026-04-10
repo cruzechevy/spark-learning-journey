@@ -47,11 +47,7 @@ Grouped by vehicle_id, model, plant and calculated: - avg_speed\
 
 ### Step 4: Risk Scoring (Normalized)
 
-Normalized metrics and applied weighted scoring:
-
-df_poormodels = df_poormodels.withColumn( "riskscore", 100 - (
-((df_poormodels.avg_engine_temp / max_avg_engine_temp) \* 100 \* 0.5) +
-((df_poormodels.overheated_vehicles / max_overheat) \* 100 \* 0.5) ) )
+Normalized metrics and applied weighted scoring: as each event has a different risk factor
 
 ### Step 5: Output
 
