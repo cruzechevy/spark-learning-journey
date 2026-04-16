@@ -4,6 +4,11 @@ services:
   spark-master:
     image: apache/spark:3.5.0
     container_name: spark-master
+    user: "1000:1000"
+    environment:
+      - HOME=/tmp
+      - USER=spark
+      - HADOOP_USER_NAME=spark
     command: >
       /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
     volumes:
@@ -18,6 +23,11 @@ services:
   spark-worker:
     image: apache/spark:3.5.0
     container_name: spark-worker
+    user: "1000:1000"
+    environment:
+      - HOME=/tmp
+      - USER=spark
+      - HADOOP_USER_NAME=spark
     depends_on:
       - spark-master
     command: >
@@ -31,6 +41,11 @@ services:
   spark-submit:
     image: apache/spark:3.5.0
     container_name: spark-submit
+    user: "1000:1000"
+    environment:
+      - HOME=/tmp
+      - USER=spark
+      - HADOOP_USER_NAME=spark
     depends_on:
       - spark-master
     volumes:
